@@ -1,122 +1,198 @@
-import { useState } from 'react'
-import reactLogo from './assets/react.svg'
-import viteLogo from './assets/vite.svg'
-import heroImg from './assets/hero.png'
-import './App.css'
+import { useEffect, useState } from "react";
+import "./App.css";
+
+const API_URL = "http://localhost:3000";
 
 function App() {
-  const [count, setCount] = useState(0)
+  const [fruits, setFruits] = useState([]);
+  const [stats, setStats] = useState(null);
+  const [search, setSearch] = useState("");
+  const [selectedFruit, setSelectedFruit] = useState(null);
+  const [loading, setLoading] = useState(true);
+  const [searchLoading, setSearchLoading] = useState(false);
+  const [error, setError] = useState("");
+
+  useEffect(() => {
+    fetchInitialData();
+  }, []);
+
+  async function fetchInitialData() {
+    try {
+      setLoading(true);
+      setError("");
+
+      const [fruitsResponse, statsResponse] = await Promise.all([
+        fetch(`${API_URL}/fruits`),
+        fetch(`${API_URL}/stats`),
+      ]);
+
+      if (!fruitsResponse.ok) {
+        throw new Error("No se pudieron obtener las frutas");
+      }
+
+      if (!statsResponse.ok) {
+        throw new Error("No se pudieron obtener las estadísticas");
+      }
+
+      const fruitsData = await fruitsResponse.json();
+      const statsData = await statsResponse.json();
+
+      setFruits(fruitsData);
+      setStats(statsData);
+    } catch (error) {
+      setError(error.message);
+    } finally {
+      setLoading(false);
+    }
+  }
+
+  async function searchFruit(event) {
+    event.preventDefault();
+
+    if (!search.trim()) {
+      setSelectedFruit(null);
+      return;
+    }
+
+    try {
+      setSearchLoading(true);
+      setError("");
+
+      const response = await fetch(`${API_URL}/fruits/${search.trim()}`);
+
+      if (!response.ok) {
+        throw new Error("Fruta no encontrada");
+      }
+
+      const fruit = await response.json();
+      setSelectedFruit(fruit);
+    } catch (error) {
+      setSelectedFruit(null);
+      setError(error.message);
+    } finally {
+      setSearchLoading(false);
+    }
+  }
+
+  if (loading) {
+    return (
+      <main className="app">
+        <section className="hero">
+          <p>Cargando FruitOps...</p>
+        </section>
+      </main>
+    );
+  }
 
   return (
-    <>
-      <section id="center">
-        <div className="hero">
-          <img src={heroImg} className="base" width="170" height="179" alt="" />
-          <img src={reactLogo} className="framework" alt="React logo" />
-          <img src={viteLogo} className="vite" alt="Vite logo" />
-        </div>
-        <div>
-          <h1>Get started</h1>
-          <p>
-            Edit <code>src/App.jsx</code> and save to test <code>HMR</code>
-          </p>
-        </div>
-        <button
-          type="button"
-          className="counter"
-          onClick={() => setCount((count) => count + 1)}
-        >
-          Count is {count}
-        </button>
+    <main className="app">
+      <section className="hero">
+        <p className="eyebrow">Mini proyecto DevOps</p>
+        <h1>FruitOps</h1>
+        <p className="subtitle">
+          Una app para consultar frutas, estadísticas nutricionales y practicar
+          backend, frontend, APIs, Git y DevOps.
+        </p>
       </section>
 
-      <div className="ticks"></div>
+      {error && (
+        <section className="alert">
+          <strong>Error:</strong> {error}
+        </section>
+      )}
 
-      <section id="next-steps">
-        <div id="docs">
-          <svg className="icon" role="presentation" aria-hidden="true">
-            <use href="/icons.svg#documentation-icon"></use>
-          </svg>
-          <h2>Documentation</h2>
-          <p>Your questions, answered</p>
-          <ul>
-            <li>
-              <a href="https://vite.dev/" target="_blank">
-                <img className="logo" src={viteLogo} alt="" />
-                Explore Vite
-              </a>
-            </li>
-            <li>
-              <a href="https://react.dev/" target="_blank">
-                <img className="button-icon" src={reactLogo} alt="" />
-                Learn more
-              </a>
-            </li>
-          </ul>
-        </div>
-        <div id="social">
-          <svg className="icon" role="presentation" aria-hidden="true">
-            <use href="/icons.svg#social-icon"></use>
-          </svg>
-          <h2>Connect with us</h2>
-          <p>Join the Vite community</p>
-          <ul>
-            <li>
-              <a href="https://github.com/vitejs/vite" target="_blank">
-                <svg
-                  className="button-icon"
-                  role="presentation"
-                  aria-hidden="true"
-                >
-                  <use href="/icons.svg#github-icon"></use>
-                </svg>
-                GitHub
-              </a>
-            </li>
-            <li>
-              <a href="https://chat.vite.dev/" target="_blank">
-                <svg
-                  className="button-icon"
-                  role="presentation"
-                  aria-hidden="true"
-                >
-                  <use href="/icons.svg#discord-icon"></use>
-                </svg>
-                Discord
-              </a>
-            </li>
-            <li>
-              <a href="https://x.com/vite_js" target="_blank">
-                <svg
-                  className="button-icon"
-                  role="presentation"
-                  aria-hidden="true"
-                >
-                  <use href="/icons.svg#x-icon"></use>
-                </svg>
-                X.com
-              </a>
-            </li>
-            <li>
-              <a href="https://bsky.app/profile/vite.dev" target="_blank">
-                <svg
-                  className="button-icon"
-                  role="presentation"
-                  aria-hidden="true"
-                >
-                  <use href="/icons.svg#bluesky-icon"></use>
-                </svg>
-                Bluesky
-              </a>
-            </li>
-          </ul>
-        </div>
+      {stats && (
+        <section className="stats-grid">
+          <article className="stat-card">
+            <span>Total frutas</span>
+            <strong>{stats.totalFruits}</strong>
+          </article>
+
+          <article className="stat-card">
+            <span>Promedio calorías</span>
+            <strong>{stats.averageCalories}</strong>
+          </article>
+
+          <article className="stat-card">
+            <span>Promedio azúcar</span>
+            <strong>{stats.averageSugar}g</strong>
+          </article>
+
+          <article className="stat-card">
+            <span>Más azúcar</span>
+            <strong>{stats.fruitWithMostSugar?.name}</strong>
+          </article>
+        </section>
+      )}
+
+      <section className="search-section">
+        <h2>Buscar fruta</h2>
+
+        <form onSubmit={searchFruit} className="search-form">
+          <input
+            type="text"
+            placeholder="Ejemplo: banana, apple, strawberry"
+            value={search}
+            onChange={(event) => setSearch(event.target.value)}
+          />
+          <button type="submit">
+            {searchLoading ? "Buscando..." : "Buscar"}
+          </button>
+        </form>
+
+        {selectedFruit && (
+          <FruitCard fruit={selectedFruit} featured />
+        )}
       </section>
 
-      <div className="ticks"></div>
-      <section id="spacer"></section>
-    </>
-  )
+      <section className="fruits-section">
+        <div className="section-header">
+          <h2>Frutas disponibles</h2>
+          <button onClick={fetchInitialData}>Actualizar</button>
+        </div>
+
+        <div className="fruit-grid">
+          {fruits.slice(0, 12).map((fruit) => (
+            <FruitCard key={fruit.id || fruit.name} fruit={fruit} />
+          ))}
+        </div>
+      </section>
+    </main>
+  );
 }
 
-export default App
+function FruitCard({ fruit, featured = false }) {
+  return (
+    <article className={featured ? "fruit-card featured" : "fruit-card"}>
+      <h3>{fruit.name}</h3>
+
+      <p className="family">
+        {fruit.family} · {fruit.genus}
+      </p>
+
+      <div className="nutrition-grid">
+        <div>
+          <span>Calorías</span>
+          <strong>{fruit.nutritions?.calories}</strong>
+        </div>
+
+        <div>
+          <span>Azúcar</span>
+          <strong>{fruit.nutritions?.sugar}g</strong>
+        </div>
+
+        <div>
+          <span>Carbos</span>
+          <strong>{fruit.nutritions?.carbohydrates}g</strong>
+        </div>
+
+        <div>
+          <span>Proteína</span>
+          <strong>{fruit.nutritions?.protein}g</strong>
+        </div>
+      </div>
+    </article>
+  );
+}
+
+export default App;
