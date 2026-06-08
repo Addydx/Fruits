@@ -1,24 +1,24 @@
-name: Backend CI
+name: Frontend CI
 
 on:
   push:
     branches: [main]
     paths:
-      - "backend/**"
-      - ".github/workflows/backend-ci.yml"
+      - "frontend/**"
+      - ".github/workflows/frontend-ci.yml"
   pull_request:
     branches: [main]
     paths:
-      - "backend/**"
-      - ".github/workflows/backend-ci.yml"
+      - "frontend/**"
+      - ".github/workflows/frontend-ci.yml"
 
 jobs:
-  backend-check:
+  frontend-check:
     runs-on: ubuntu-latest
 
     defaults:
       run:
-        working-directory: backend
+        working-directory: frontend
 
     steps:
       - name: Descargar código
@@ -32,5 +32,5 @@ jobs:
       - name: Instalar dependencias
         run: npm ci
 
-      - name: Verificar servidor
+      - name: Verificar build
         run: npm run build
