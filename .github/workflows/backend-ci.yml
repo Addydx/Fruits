@@ -31,11 +31,15 @@ jobs:
 
       - name: Instalar dependencias
         run: npm ci
+      
+      - name: Verificar archivos
+        run: | 
+          ls -la
+          cat package.json
 
-      - name: Verificar servidor
-        run: 
-          npm start & 
-          sleep 5 
-        curl --fail http://localhost:3000/health
-
-
+      -name: Verificar servidor
+        run:|
+          npm start > server.log 2>&1 &
+          sleep 8
+          cat server.log
+      curl --fail http://localhost:3000/health
