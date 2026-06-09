@@ -6,6 +6,7 @@
 }
 
 body {
+  margin: 0;
   background: linear-gradient(135deg, #fff0fc, #f2c8ff);
   min-height: 100vh;
   background-attachment: fixed; /* Esto sirve para que el fondo permanezca fijo mientras se hace scroll */
