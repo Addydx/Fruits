@@ -1,0 +1,40 @@
+.fruit-list {
+    padding: 20px; /* Agrega espacio alrededor de la lista de frutas */
+}
+
+.fruit-list h2 {
+    text-align: center; /* Centra el título */
+    margin-bottom: 20px; /* Agrega espacio debajo del título */
+}
+
+.fruit-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); /* Crea una cuadrícula flexible */
+    gap: 20px; /* Espacio entre las tarjetas*/
+}
+
+.fruit-card {
+    border: 1px solid hsl(0, 0%, 100%); /* Agrega un borde a cada tarjeta de fruta */
+    border-radius: 10px;
+    padding: 15px; /* agrega espacio dentro de cada tarjeta */
+    background: linear-gradient(135deg, #ffffff, #e4f4eb); /* Agrega un fondo degradado a cada tarjeta */
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1); /* agrega una sombra para dar profundidad */
+    transition: transform 0.4s; /* Agrega una transición suave para el efecto hover */
+}
+
+.fruit-card:hover {
+    transform: translateY(-5px); /*Eleva la tarjeta ligeramente al hacer hover */
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2); /* Aumenta la sombra al hacer hover */
+}
+
+.fruit-card h3 {
+    margin-top: 0; /* Elimina el margen superior del título de la fruta */
+    color: #2b2b2b; /* Cambia el color del texto del título */
+    margin-bottom: 10px;
+}
+
+.fruit-card p {
+    margin: 5px 0;
+    font-size: 16px;
+    color:#3b3b3b; /* Cambia el color del texto de la descripción */
+}
