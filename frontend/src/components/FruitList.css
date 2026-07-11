@@ -1,40 +1,416 @@
+/* ── Fruit List ── */
 .fruit-list {
-    padding: 20px; /* Agrega espacio alrededor de la lista de frutas */
+  animation: fadeIn 0.5s ease-out;
 }
 
-.fruit-list h2 {
-    text-align: center; /* Centra el título */
-    margin-bottom: 20px; /* Agrega espacio debajo del título */
+.fruit-list-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 32px;
+  flex-wrap: wrap;
+  gap: 16px;
 }
 
+.fruit-list-title-group {
+  display: flex;
+  align-items: baseline;
+  gap: 12px;
+}
+
+.fruit-list-title {
+  font-size: 28px;
+  font-weight: 700;
+  color: var(--color-dark);
+  letter-spacing: -0.5px;
+}
+
+.fruit-list-count {
+  font-size: 14px;
+  color: var(--color-gray-400);
+  font-weight: 500;
+}
+
+.fruit-list-controls {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+.sort-buttons {
+  display: flex;
+  background: var(--color-white);
+  border: 1px solid var(--color-gray-200);
+  border-radius: var(--radius-md);
+  padding: 3px;
+  gap: 2px;
+  box-shadow: var(--shadow-sm);
+}
+
+.sort-btn {
+  padding: 6px 14px;
+  border: none;
+  border-radius: var(--radius-sm);
+  font-size: 13px;
+  font-weight: 500;
+  font-family: var(--font-sans);
+  color: var(--color-gray-500);
+  background: transparent;
+  cursor: pointer;
+  transition: all var(--transition-fast);
+}
+
+.sort-btn:hover {
+  color: var(--color-gray-700);
+  background: var(--color-gray-50);
+}
+
+.sort-btn.active {
+  color: var(--color-white);
+  background: var(--color-primary);
+  box-shadow: 0 1px 3px rgba(34, 197, 94, 0.3);
+}
+
+/* ── Grid ── */
 .fruit-grid {
-    display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); /* Crea una cuadrícula flexible */
-    gap: 20px; /* Espacio entre las tarjetas*/
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
+  gap: 20px;
 }
 
+/* ── Fruit Card ── */
 .fruit-card {
-    border: 1px solid hsl(0, 0%, 100%); /* Agrega un borde a cada tarjeta de fruta */
-    border-radius: 10px;
-    padding: 15px; /* agrega espacio dentro de cada tarjeta */
-    background: linear-gradient(135deg, #ffffff, #e4f4eb); /* Agrega un fondo degradado a cada tarjeta */
-    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1); /* agrega una sombra para dar profundidad */
-    transition: transform 0.4s; /* Agrega una transición suave para el efecto hover */
+  background: var(--color-white);
+  border: 1px solid var(--color-gray-100);
+  border-radius: var(--radius-lg);
+  padding: 24px;
+  transition: all var(--transition-base);
+  animation: fadeInUp 0.5s ease-out both;
+  position: relative;
+  overflow: hidden;
+}
+
+.fruit-card::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 3px;
+  background: linear-gradient(90deg, var(--color-primary), var(--color-light));
+  opacity: 0;
+  transition: opacity var(--transition-base);
 }
 
 .fruit-card:hover {
-    transform: translateY(-5px); /*Eleva la tarjeta ligeramente al hacer hover */
-    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2); /* Aumenta la sombra al hacer hover */
+  transform: translateY(-4px);
+  box-shadow: var(--shadow-xl), var(--shadow-glow);
+  border-color: rgba(34, 197, 94, 0.15);
 }
 
-.fruit-card h3 {
-    margin-top: 0; /* Elimina el margen superior del título de la fruta */
-    color: #2b2b2b; /* Cambia el color del texto del título */
-    margin-bottom: 10px;
+.fruit-card:hover::before {
+  opacity: 1;
 }
 
-.fruit-card p {
-    margin: 5px 0;
-    font-size: 16px;
-    color:#3b3b3b; /* Cambia el color del texto de la descripción */
+/* ── Card Image ── */
+.fruit-card-image {
+  width: 100%;
+  height: 180px;
+  border-radius: var(--radius-md);
+  overflow: hidden;
+  margin-bottom: 16px;
+  background: var(--color-gray-100);
+}
+
+.fruit-card-image img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  transition: transform 0.5s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.fruit-card:hover .fruit-card-image img {
+  transform: scale(1.05);
+}
+
+.fruit-card-image--empty {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.fruit-card-image-placeholder {
+  width: 100%;
+  height: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: linear-gradient(135deg, var(--color-bg), rgba(34, 197, 94, 0.06));
+}
+
+.placeholder-initial {
+  font-size: 48px;
+  font-weight: 800;
+  color: var(--color-light);
+  user-select: none;
+}
+
+.fruit-card-body {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+/* ── Card Description ── */
+.fruit-card-desc {
+  font-size: 13px;
+  color: var(--color-gray-500);
+  line-height: 1.5;
+  margin: 0;
+}
+
+.fruit-card-titles {
+  min-width: 0;
+}
+
+.fruit-card-name {
+  font-size: 18px;
+  font-weight: 700;
+  color: var(--color-dark);
+  margin: 0;
+  line-height: 1.2;
+  letter-spacing: -0.3px;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.fruit-card-family {
+  font-size: 13px;
+  color: var(--color-gray-400);
+  font-weight: 500;
+}
+
+.fruit-card-meta {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+  margin-bottom: 18px;
+}
+
+.fruit-tag {
+  display: inline-block;
+  padding: 3px 10px;
+  border-radius: 980px;
+  font-size: 11px;
+  font-weight: 600;
+  letter-spacing: 0.5px;
+  color: var(--color-mid);
+  background: var(--color-bg);
+  border: 1px solid rgba(34, 197, 94, 0.12);
+}
+
+.tag-categoria {
+  color: var(--color-mid);
+  background: rgba(34, 197, 94, 0.08);
+}
+
+.tag-temporada {
+  color: #92400e;
+  background: rgba(251, 191, 36, 0.1);
+  border-color: rgba(251, 191, 36, 0.2);
+}
+
+.tag-color {
+  color: #7c3aed;
+  background: rgba(139, 92, 246, 0.08);
+  border-color: rgba(139, 92, 246, 0.15);
+}
+
+/* ── Nutrition Bars ── */
+.fruit-card-nutrition {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.nutrition-row {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+.nutrition-label {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  font-size: 12px;
+  color: var(--color-gray-500);
+  font-weight: 500;
+}
+
+.nutrition-value {
+  font-weight: 600;
+  color: var(--color-gray-700);
+  font-variant-numeric: tabular-nums;
+}
+
+.nutrition-track {
+  height: 6px;
+  border-radius: 3px;
+  background: var(--color-gray-100);
+  overflow: hidden;
+}
+
+.nutrition-fill {
+  height: 100%;
+  border-radius: 3px;
+  background: linear-gradient(90deg, var(--color-primary), var(--color-light));
+  transition: width 0.8s cubic-bezier(0.4, 0, 0.2, 1);
+  min-width: 2px;
+}
+
+/* ── Skeleton Loading ── */
+.fruit-card.skeleton {
+  pointer-events: none;
+}
+
+.skeleton-pulse {
+  background: linear-gradient(90deg, var(--color-gray-100) 25%, var(--color-gray-50) 50%, var(--color-gray-100) 75%);
+  background-size: 200% 100%;
+  animation: shimmer 1.5s infinite;
+  border-radius: var(--radius-sm);
+}
+
+.skeleton-image {
+  width: 100%;
+  height: 180px;
+  border-radius: var(--radius-md);
+  margin-bottom: 16px;
+}
+
+.skeleton-body {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.skeleton-lines {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.skeleton-line {
+  height: 12px;
+  border-radius: 6px;
+}
+
+.skeleton-line-title {
+  width: 60%;
+  height: 16px;
+}
+
+.skeleton-line-sub {
+  width: 40%;
+}
+
+.skeleton-nutrition {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.skeleton-nutrition .skeleton-line {
+  height: 20px;
+  border-radius: 6px;
+}
+
+/* ── Empty State ── */
+.fruit-list-empty {
+  text-align: center;
+  padding: 80px 24px;
+  animation: fadeIn 0.5s ease-out;
+}
+
+.empty-emoji {
+  font-size: 48px;
+  display: block;
+  margin-bottom: 16px;
+}
+
+.fruit-list-empty h3 {
+  font-size: 20px;
+  font-weight: 700;
+  color: var(--color-dark);
+  margin-bottom: 8px;
+}
+
+.fruit-list-empty p {
+  color: var(--color-gray-400);
+  font-size: 15px;
+}
+
+/* ── Error State ── */
+.fruit-list-error {
+  text-align: center;
+  padding: 80px 24px;
+  animation: fadeIn 0.5s ease-out;
+}
+
+.error-icon {
+  font-size: 48px;
+  margin-bottom: 16px;
+}
+
+.fruit-list-error h3 {
+  font-size: 20px;
+  font-weight: 700;
+  color: var(--color-dark);
+  margin-bottom: 8px;
+}
+
+.fruit-list-error p {
+  color: var(--color-gray-400);
+  font-size: 15px;
+  max-width: 400px;
+  margin: 0 auto;
+}
+
+/* ── Responsive ── */
+@media (max-width: 768px) {
+  .fruit-grid {
+    grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+    gap: 16px;
+  }
+
+  .fruit-list-header {
+    flex-direction: column;
+    align-items: flex-start;
+  }
+
+  .fruit-list-title {
+    font-size: 24px;
+  }
+}
+
+@media (max-width: 480px) {
+  .fruit-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .fruit-card {
+    padding: 20px;
+  }
+
+  .sort-buttons {
+    width: 100%;
+    justify-content: center;
+  }
+
+  .sort-btn {
+    flex: 1;
+    text-align: center;
+  }
 }
